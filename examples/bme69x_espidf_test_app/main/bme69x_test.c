@@ -157,8 +157,8 @@ TEST_CASE("BME69X forced_mode", "[BME69X][forced_mode]")
     conf.filter = BME69X_FILTER_OFF;
     conf.odr = BME69X_ODR_NONE;
     conf.os_hum = BME69X_OS_16X;
-    conf.os_pres = BME69X_OS_1X;
-    conf.os_temp = BME69X_OS_2X;
+    conf.os_pres = BME69X_OS_16X;
+    conf.os_temp = BME69X_OS_16X;
     rslt = bme69x_set_conf(&conf, bme69x_handle);
     bme69x_check_rslt("bme69x_set_conf", rslt);
     TEST_ASSERT_EQUAL(BME69X_OK, rslt);
@@ -181,7 +181,7 @@ TEST_CASE("BME69X forced_mode", "[BME69X][forced_mode]")
 
         /* Calculate delay period in microseconds */
         del_period = bme69x_get_meas_dur(BME69X_FORCED_MODE, &conf, bme69x_handle) + (heatr_conf.heatr_dur * 1000);
-        vTaskDelay(pdMS_TO_TICKS((del_period + 999) / 1000));  // Convert to ms and delay
+        bme69x_handle->delay_us(del_period, bme69x_handle->intf_ptr);
 
         time_ms = esp_timer_get_time() / 1000;  // Convert to milliseconds
 
@@ -192,14 +192,25 @@ TEST_CASE("BME69X forced_mode", "[BME69X][forced_mode]")
 
         if (n_fields)
         {
+#ifdef BME69X_USE_FPU
             printf("%u, %lu, %.2f, %.2f, %.2f, %.2f, 0x%x\n",
                    sample_count,
-                   (unsigned long)time_ms,
+                   (long unsigned int)time_ms,
                    data.temperature,
                    data.pressure,
                    data.humidity,
                    data.gas_resistance,
                    data.status);
+#else
+            printf("%u, %lu, %d, %ld, %ld, %ld, 0x%x\n",
+                   sample_count,
+                   (long unsigned int)time_ms,
+                   data.temperature,
+                   data.pressure,
+                   data.humidity,
+                   data.gas_resistance,
+                   data.status);
+#endif
             sample_count++;
         }
     }
