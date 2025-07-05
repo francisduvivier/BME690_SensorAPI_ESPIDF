@@ -1,4 +1,4 @@
-version: "0.0.6"
+version: "0.0.7"
 dependencies:
   espressif/i2c_bus: "1.*"
   cmake_utilities:
@@ -12,4 +12,13 @@ documentation: "https://github.com/boschsensortec/BME690_SensorAPI"
 issues: "https://github.com/francisduvivier/BME690_SensorAPI_ESPIDF/issues"
 license: "MIT"
 files:
-  use_gitignore: true
+  exclude:
+    - "**/.github/**/*"
+    - "dist/**/*"
+    - ".git/**/*"
+    - ".idea/**/*"
+    - "**/build/**/*"
+    - "**/cmake-build-debug/**/*"
+    - "examples/*/sdkconfig.old"
+    - "examples/*/sdkconfig"
+    - "examples/*/managed_components/**/*"
