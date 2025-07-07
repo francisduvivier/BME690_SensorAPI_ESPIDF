@@ -13,12 +13,6 @@
 
 
 /******************************************************************************/
-/*!                 Macro definitions                                         */
-/*! BME69X shuttle board ID */
-#define BME69X_SHUTTLE_ID  0x93
-
-/******************************************************************************/
-static uint8_t dev_addr;
 static i2c_bus_device_handle_t intf_conf;
 
 /******************************************************************************/
@@ -114,8 +108,6 @@ int8_t bme69x_interface_init(struct bme69x_dev *bme, uint8_t intf, uint8_t dev_a
 
     if (bme != NULL)
     {
-        int16_t result = BME69X_OK;
-
         if (intf == BME69X_I2C_INTF)
         {
             bme->intf = BME69X_I2C_INTF;
